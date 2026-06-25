@@ -1,33 +1,41 @@
-const openBtn = document.getElementById("open-case");
-const lock = document.getElementById("lock-screen");
-const caseFile = document.getElementById("case-file");
-const typewriter = document.getElementById("typewriter");
+const intro = document.getElementById("intro");
+const main = document.getElementById("main");
+const openFile = document.getElementById("openFile");
+const typing = document.getElementById("typing");
 const petals = document.querySelector(".petals");
+const glow = document.querySelector(".cursor-glow");
 
-const message = "Investigation complete. The evidence proves one thing: Roudah is unforgettable.";
+const introLine = "A birthday mystery for the girl who loves tulips, matcha, Disney, Marvel, and stories that keep you guessing.";
 
-for(let i=0;i<26;i++){
+for(let i=0;i<42;i++){
   const p = document.createElement("span");
-  p.textContent = i % 3 === 0 ? "🌷" : "❀";
+  p.textContent = i % 5 === 0 ? "🌷" : "❀";
   p.style.left = Math.random()*100 + "vw";
-  p.style.animationDuration = 9 + Math.random()*12 + "s";
-  p.style.animationDelay = Math.random()*10 + "s";
-  p.style.fontSize = 14 + Math.random()*18 + "px";
+  p.style.animationDuration = 8 + Math.random()*14 + "s";
+  p.style.animationDelay = Math.random()*12 + "s";
+  p.style.fontSize = 12 + Math.random()*20 + "px";
   petals.appendChild(p);
 }
 
-openBtn.addEventListener("click", () => {
-  lock.classList.add("hidden");
-  caseFile.classList.remove("hidden");
-  setTimeout(type, 350);
+document.addEventListener("mousemove", e=>{
+  glow.style.left = e.clientX + "px";
+  glow.style.top = e.clientY + "px";
 });
 
-let i = 0;
-function type(){
-  if(i < message.length){
-    typewriter.textContent += message[i];
-    i++;
-    setTimeout(type, 38);
+openFile.addEventListener("click", () => {
+  openFile.classList.add("crack");
+  setTimeout(() => {
+    intro.classList.add("hidden");
+    main.classList.remove("hidden");
+    typeText();
+  }, 720);
+});
+
+let t = 0;
+function typeText(){
+  if(t < introLine.length){
+    typing.textContent += introLine[t++];
+    setTimeout(typeText, 34);
   }
 }
 
@@ -37,60 +45,65 @@ const observer = new IntersectionObserver(entries=>{
       entry.target.classList.add("visible");
       observer.unobserve(entry.target);
     }
-  })
-},{threshold:.16});
-
+  });
+},{threshold:.15});
 document.querySelectorAll(".reveal").forEach(el=>observer.observe(el));
 
-const reveal = document.getElementById("gift-reveal");
+const clueReveal = document.getElementById("clueReveal");
+const secretNote = document.getElementById("secretNote");
+const openedClues = new Set();
+
+document.querySelectorAll(".clue-card").forEach((btn, index)=>{
+  btn.addEventListener("click",()=>{
+    btn.classList.add("opened");
+    openedClues.add(index);
+    clueReveal.textContent = btn.dataset.clue;
+    clueReveal.animate(
+      [{opacity:0, transform:"translateY(14px)"},{opacity:1, transform:"translateY(0)"}],
+      {duration:440, easing:"ease-out"}
+    );
+    if(openedClues.size === 6){
+      secretNote.classList.remove("hidden");
+      secretNote.animate(
+        [{opacity:0, transform:"scale(.96)"},{opacity:1, transform:"scale(1)"}],
+        {duration:620, easing:"ease-out"}
+      );
+    }
+  });
+});
+
+const giftPanel = document.getElementById("giftPanel");
 const gifts = {
-  novels: {
+  books: {
     title: "📚 Apple Books Fund — AED 250",
-    body: "A birthday library fund for the girl who loves crime, detectives, scary stories, and every mystery worth solving.",
-    label: "Apple Gift Card",
-    code: "Sent separately for your safety ❤️",
-    note: "Use it for Apple Books and choose the novels that pull you into another world. I picked some recommendations for you above."
+    body: "For your next mysteries, detective cases, scary stories, and plot twists. I picked a few recommendations below, but the library is yours to build.",
+    status: "Apple gift card sent privately ❤️"
   },
   disney: {
-    title: "🎬 Disney+ — One Month",
-    body: "For Disney comfort nights, Marvel marathons, and all the stories you can escape into whenever you want.",
-    label: "Disney+ Access",
-    code: "Login details sent separately for your privacy ❤️",
-    note: "I subscribed using my number, so I will send the login details privately instead of putting them on a public website."
+    title: "🎬 Disney+ — 1 Month",
+    body: "For Disney comfort nights, Marvel marathons, and every story you want to disappear into when you need something cozy.",
+    status: "Access details sent privately ❤️"
   },
   matcha: {
     title: "🍵 Beanz Matcha Fund",
-    body: "Official detective fuel. Reserved for emergency matcha cravings and sweet little coffee shop moments.",
-    label: "Beanz Matcha Gift",
-    code: "Sent separately in the Beanz app ❤️",
-    note: "Your Beanz matcha gift will arrive separately through the Beanz app."
+    body: "Official detective fuel for emergency matcha cravings, sweet little café moments, and days that need something comforting.",
+    status: "Sent through Beanz ❤️"
   }
 };
 
-document.querySelectorAll(".gift-box").forEach(btn=>{
+document.querySelectorAll(".gift-card").forEach(btn=>{
   btn.addEventListener("click",()=>{
+    document.querySelectorAll(".gift-card").forEach(g=>g.classList.remove("opened"));
+    btn.classList.add("opened");
     const gift = gifts[btn.dataset.gift];
-    reveal.innerHTML = `
+    giftPanel.innerHTML = `
       <h3>${gift.title}</h3>
       <p>${gift.body}</p>
-      <div class="redeem-card">
-        <div class="code-box">
-          <span class="code-label">${gift.label}</span>
-          <span class="code-value">${gift.code}</span>
-        </div>
-        <button class="copy-btn" data-code="${gift.code}">Copy Code</button>
-        <p class="redeem-note">${gift.note}</p>
-      </div>
+      <span class="status-pill">${gift.status}</span>
     `;
-    reveal.animate([{opacity:0, transform:"translateY(14px)"},{opacity:1, transform:"translateY(0)"}],{duration:450,easing:"ease-out"});
-    const copyBtn = reveal.querySelector(".copy-btn");
-    copyBtn.addEventListener("click", async () => {
-      try {
-        await navigator.clipboard.writeText(copyBtn.dataset.code);
-        copyBtn.textContent = "Copied ✓";
-      } catch {
-        copyBtn.textContent = "Copy manually";
-      }
-    });
+    giftPanel.animate(
+      [{opacity:0, transform:"translateY(16px)"},{opacity:1, transform:"translateY(0)"}],
+      {duration:520, easing:"ease-out"}
+    );
   });
 });
