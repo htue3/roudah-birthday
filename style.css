@@ -275,3 +275,179 @@ footer{text-align:center; color:var(--muted); padding:46px 20px 82px}
   .chapter{padding:24px; margin:52px auto}
   .passport-page{padding:30px}
 }
+
+
+/* Mobile-first polish */
+@media(max-width:700px){
+  body{
+    background:
+      radial-gradient(circle at top, rgba(227,187,102,.16), transparent 30%),
+      linear-gradient(#100906 0%, #040201 60%, #010101 100%);
+  }
+
+  .cursor-glow{display:none}
+
+  .intro{
+    padding:18px;
+    align-items:center;
+  }
+
+  .case-folder{
+    padding:52px 18px 42px;
+    border-radius:22px;
+    animation:none;
+  }
+
+  .folder-tab{
+    left:16px;
+    right:16px;
+    top:-32px;
+    text-align:center;
+    padding:10px;
+    font-size:.66rem;
+  }
+
+  .wax-seal{
+    width:92px;
+    height:92px;
+    font-size:40px;
+  }
+
+  h1{
+    font-size:clamp(38px,14vw,58px);
+    line-height:1.05;
+  }
+
+  h2{
+    font-size:clamp(30px,11vw,46px);
+    line-height:1.08;
+  }
+
+  h3{
+    font-size:clamp(24px,8vw,34px);
+    line-height:1.15;
+  }
+
+  .intro-line{
+    font-size:1rem;
+  }
+
+  .opening{
+    min-height:92vh;
+    padding:34px 18px;
+  }
+
+  .typing{
+    font-size:1rem;
+    min-height:70px;
+  }
+
+  .chapter-scroll{
+    margin-top:22px;
+  }
+
+  .nav{
+    gap:8px;
+    padding:10px;
+  }
+
+  .nav a{
+    padding:10px 13px;
+    font-size:.85rem;
+  }
+
+  .chapter{
+    width:calc(100% - 18px);
+    margin:36px auto;
+    padding:18px;
+    border-radius:22px;
+  }
+
+  .profile-grid,
+  .birthday-card,
+  .passport{
+    grid-template-columns:1fr;
+  }
+
+  .profile-grid,
+  .birthday-card,
+  .bookshelf,
+  .gift-panel,
+  .clue-reveal{
+    padding:18px;
+    border-radius:20px;
+  }
+
+  .trait-orbit,
+  .clue-grid,
+  .gift-grid,
+  .books{
+    grid-template-columns:1fr;
+  }
+
+  .trait-orbit div{
+    padding:15px;
+  }
+
+  .clue-card,
+  .gift-card{
+    min-height:120px;
+    border-radius:20px;
+  }
+
+  .gift-emoji{
+    font-size:48px;
+    margin-bottom:10px;
+  }
+
+  .books article{
+    min-height:150px;
+  }
+
+  .passport{
+    min-height:auto;
+    border-radius:24px;
+  }
+
+  .passport-cover{
+    min-height:230px;
+  }
+
+  .passport-page{
+    padding:24px;
+  }
+
+  .stamp{
+    position:static;
+    display:inline-block;
+    margin-top:18px;
+  }
+
+  .finale{
+    min-height:auto;
+  }
+
+  .sunrise{
+    width:260px;
+    height:150px;
+  }
+
+  .tulip-row{
+    font-size:44px;
+    gap:6px;
+  }
+
+  .petals span{
+    opacity:.55;
+  }
+}
+
+@media (prefers-reduced-motion: reduce){
+  *,
+  *::before,
+  *::after{
+    animation-duration:.01ms!important;
+    animation-iteration-count:1!important;
+    scroll-behavior:auto!important;
+  }
+}
